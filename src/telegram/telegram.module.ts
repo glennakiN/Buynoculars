@@ -3,7 +3,10 @@ import { Module } from '@nestjs/common';
 import { TelegramService } from './telegram.service';
 
 // Internal modules
-import { MenusModule } from './menus/menus.module';
+import { sendWatchlistMenu } from './menus/watchlist.menu';
+import { sendAlertsMenu } from './menus/alerts.menu';
+import { sendTopGainersMenu } from './menus/topGainers.menu';
+import { sendTopLosersMenu } from './menus/topLosers.menu';
 import { WizardsModule } from './wizards/wizards.module';
 import { ComponentsModule } from './components/components.module';
 
@@ -16,7 +19,7 @@ import { AlertService } from './services/alert.service';
 import { MultiPickerComponent } from './components/multi-picker.component';
 
 @Module({
-  imports: [MenusModule, WizardsModule, ComponentsModule],
+  imports: [WizardsModule, ComponentsModule],
   providers: [
     TelegramService,
     CoinSearchService,

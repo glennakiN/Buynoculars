@@ -7,7 +7,7 @@ import { showSuccessToast, showErrorToast } from '../../components/feedback.comp
 import { WatchlistService } from '../../services/watchlist.service';
 import { createGoBackButton } from '../../constants/buttons.constant';
 import { Markup } from 'telegraf';
-import { showWatchlistMenu } from '../../menus/sub.menu/watchlist.menu';
+import { sendWatchlistMenu } from '../../menus/watchlist.menu';
 import { CoinSearchComponent, CoinSearchConfig, CoinSearchState } from '../../components/coin-search.component';
 import { CoinSearchService } from '../../services/coin-search.service';
 import { LoadingMessageComponent, withLoading } from '../../components/loading-message.component';
@@ -129,7 +129,7 @@ export const createAddToWatchlistWizard = (
         if (!selectedCoin || !selectedWatchlistId) {
           await showErrorToast(ctx, 'Missing required information. Please try again.');
           await ctx.scene.leave();
-          await showWatchlistMenu(ctx);
+          await sendWatchlistMenu(ctx);
           return;
         }
         
@@ -159,7 +159,7 @@ export const createAddToWatchlistWizard = (
             );
             
             // Return to watchlist menu
-            await showWatchlistMenu(ctx);
+            await sendWatchlistMenu(ctx);
             
             // Leave the scene
             await ctx.scene.leave();
@@ -177,7 +177,7 @@ export const createAddToWatchlistWizard = (
         logger.error(`Error adding coin to watchlist: ${error.message}`);
         await showErrorToast(ctx, 'Failed to add coin to watchlist. Please try again.');
         await ctx.scene.leave();
-        await showWatchlistMenu(ctx);
+        await sendWatchlistMenu(ctx);
       }
     }
   );
@@ -366,7 +366,7 @@ export const createAddToWatchlistWizard = (
       logger.error(`Error handling watchlist selection: ${error.message}`);
       await ctx.answerCbQuery('Error selecting watchlist');
       ctx.scene.leave();
-      await showWatchlistMenu(ctx);
+      await sendWatchlistMenu(ctx);
     }
   });
 
@@ -407,7 +407,7 @@ registerConfirmationHandler(
             await showSuccessToast(ctx, `Added ${selectedCoin.name} (${selectedCoin.symbol}) to "${selectedWatchlistName}"!`, 3000);
             
             // Return to watchlist menu
-            await showWatchlistMenu(ctx);
+            await sendWatchlistMenu(ctx);
             
             // Leave the scene
             await ctx.scene.leave();
@@ -425,7 +425,7 @@ registerConfirmationHandler(
         logger.error(`Error in confirmation handler: ${error.message}`);
         await showErrorToast(ctx, 'Failed to add coin to watchlist. Please try again.');
         await ctx.scene.leave();
-        await showWatchlistMenu(ctx);
+        await sendWatchlistMenu(ctx);
       }
     }
   );
@@ -455,7 +455,7 @@ registerConfirmationHandler(
     // Otherwise, leave the wizard and return to watchlist menu
     logger.log('Leaving Add to Watchlist wizard');
     await ctx.scene.leave();
-    await showWatchlistMenu(ctx);
+    await sendWatchlistMenu(ctx);
   });
 
   return addToWatchlistWizard;
@@ -487,7 +487,7 @@ async function showWatchlistSelection(ctx: CustomContext, watchlistService: Watc
     logger.error('No coin selected');
     await ctx.reply('Error: No coin selected. Please try again.');
     await ctx.scene.leave();
-    await showWatchlistMenu(ctx);
+    await sendWatchlistMenu(ctx);
     return;
   }
   
@@ -547,6 +547,6 @@ async function showWatchlistSelection(ctx: CustomContext, watchlistService: Watc
     logger.error(`Error showing watchlist selection: ${error.message}`);
     await ctx.reply('Error loading watchlists. Please try again.');
     await ctx.scene.leave();
-    await showWatchlistMenu(ctx);
+    await sendWatchlistMenu(ctx);
   }
 }

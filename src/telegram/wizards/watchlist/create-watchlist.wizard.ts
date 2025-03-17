@@ -8,7 +8,7 @@ import { showSuccessToast, showErrorToast } from '../../components/feedback.comp
 import { WatchlistService } from '../../services/watchlist.service';
 import { createGoBackButton } from '../../constants/buttons.constant';
 import { Markup } from 'telegraf';
-import { showWatchlistMenu } from '../../menus/sub.menu/watchlist.menu';
+import { sendWatchlistMenu } from '../../menus/watchlist.menu';
 
 // Create logger
 const logger = new Logger('CreateWatchlistWizard');
@@ -82,7 +82,7 @@ export const createCreateWatchlistWizard = (watchlistService: WatchlistService) 
         await ctx.reply(`Watchlist "${watchlistName}" created successfully!`);
         
         // Show the watchlist menu
-        await showWatchlistMenu(ctx);
+        await sendWatchlistMenu(ctx);
         
         ctx.scene.leave();
       } catch (error) {
@@ -135,7 +135,7 @@ export const createCreateWatchlistWizard = (watchlistService: WatchlistService) 
     await ctx.scene.leave();
     
     // Return to the watchlist menu
-    await showWatchlistMenu(ctx);
+    await sendWatchlistMenu(ctx);
   });
   
   return createWatchlistWizard;

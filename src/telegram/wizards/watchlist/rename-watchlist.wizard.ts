@@ -8,7 +8,7 @@ import { showSuccessToast, showErrorToast } from '../../components/feedback.comp
 import { WatchlistService } from '../../services/watchlist.service';
 import { createGoBackButton } from '../../constants/buttons.constant';
 import { Markup } from 'telegraf';
-import { showWatchlistMenu } from '../../menus/sub.menu/watchlist.menu';
+import { sendWatchlistMenu } from '../../menus/watchlist.menu';
 
 // Create logger
 const logger = new Logger('RenameWatchlistWizard');
@@ -41,7 +41,7 @@ export const createRenameWatchlistWizard = (watchlistService: WatchlistService) 
         if (watchlists.length === 0) {
           await ctx.reply('You don\'t have any watchlists to rename. Create one first!');
           ctx.scene.leave();
-          await showWatchlistMenu(ctx);
+          await sendWatchlistMenu(ctx);
           return;
         }
         
@@ -67,7 +67,7 @@ export const createRenameWatchlistWizard = (watchlistService: WatchlistService) 
         logger.error(`Error in rename watchlist wizard: ${error.message}`);
         await showErrorToast(ctx, 'Failed to load watchlists. Please try again.');
         ctx.scene.leave();
-        await showWatchlistMenu(ctx);
+        await sendWatchlistMenu(ctx);
       }
     },
     // Step 2: Ask for new name
@@ -90,7 +90,7 @@ export const createRenameWatchlistWizard = (watchlistService: WatchlistService) 
         if (!watchlistId || !newWatchlistName) {
           await showErrorToast(ctx, 'Missing watchlist information.');
           ctx.scene.leave();
-          await showWatchlistMenu(ctx);
+          await sendWatchlistMenu(ctx);
           return;
         }
         
@@ -112,14 +112,14 @@ export const createRenameWatchlistWizard = (watchlistService: WatchlistService) 
         await ctx.reply(`Watchlist renamed successfully!`);
         
         // Return to watchlist menu
-        await showWatchlistMenu(ctx);
+        await sendWatchlistMenu(ctx);
         
         ctx.scene.leave();
       } catch (error) {
         logger.error(`Error renaming watchlist: ${error.message}`);
         await showErrorToast(ctx, 'Failed to rename watchlist. Please try again.');
         ctx.scene.leave();
-        await showWatchlistMenu(ctx);
+        await sendWatchlistMenu(ctx);
       }
     }
   );
@@ -159,7 +159,7 @@ export const createRenameWatchlistWizard = (watchlistService: WatchlistService) 
       logger.error(`Error handling watchlist selection: ${error.message}`);
       await ctx.answerCbQuery('Error selecting watchlist');
       ctx.scene.leave();
-      await showWatchlistMenu(ctx);
+      await sendWatchlistMenu(ctx);
     }
   });
   
@@ -196,7 +196,7 @@ export const createRenameWatchlistWizard = (watchlistService: WatchlistService) 
         await renameWatchlistWizard.middleware()[currentIndex](ctx, async () => {});
       } else {
         ctx.scene.leave();
-        await showWatchlistMenu(ctx);
+        await sendWatchlistMenu(ctx);
       }
     }
   );
@@ -207,7 +207,7 @@ export const createRenameWatchlistWizard = (watchlistService: WatchlistService) 
     await ctx.scene.leave();
     
     // Return to the watchlist menu
-    await showWatchlistMenu(ctx);
+    await sendWatchlistMenu(ctx);
   });
   
   return renameWatchlistWizard;

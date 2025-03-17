@@ -6,7 +6,10 @@ import { Markup } from 'telegraf';
 import { createGoBackButton } from 'src/telegram/constants/buttons.constant';
 import { AlertService, AlertConfig, AlertType } from 'src/telegram/services/alert.service';
 import { PaginationComponent } from 'src/telegram/components/pagination.component';
-import { showAlertsMenu } from 'src/telegram/menus/sub.menu/alerts.menu';
+import { sendAlertsMenu } from '../../menus/alerts.menu';
+import { sendWatchlistMenu } from '../../menus/watchlist.menu';
+
+
 
 // Create logger for wizard
 const logger = new Logger('ShowAllAlertsWizard');
@@ -26,7 +29,7 @@ async function step1(ctx: CustomContext) {
     logger.error('Alert service not properly injected');
     await ctx.reply('An error occurred. Please try again later.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendWatchlistMenu(ctx);
   }
   
   try {
@@ -71,7 +74,7 @@ To create a new alert, return to the Alerts Menu and select "New Alert".
     logger.error(`Error fetching alerts: ${error.message}`);
     await ctx.reply('An error occurred while fetching your alerts. Please try again.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendWatchlistMenu(ctx);
   }
 }
 
@@ -161,7 +164,7 @@ async function showAlertDetails(ctx: CustomContext, alertId: string) {
     logger.error('Alert service not properly injected');
     await ctx.reply('An error occurred. Please try again later.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendWatchlistMenu(ctx);
   }
   
   try {
@@ -371,7 +374,7 @@ showAllAlertsWizard.action(/^toggle_alert_(\w+)$/, async (ctx) => {
     logger.error('Alert service not properly injected');
     await ctx.answerCbQuery('Service error. Please try again.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendWatchlistMenu(ctx);
   }
   
   try {
@@ -429,7 +432,7 @@ showAllAlertsWizard.action(/^delete_alert_(\w+)$/, async (ctx) => {
     logger.error('Alert service not properly injected');
     await ctx.answerCbQuery('Service error. Please try again.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendWatchlistMenu(ctx);
   }
   
   try {
@@ -475,5 +478,5 @@ showAllAlertsWizard.action('go_back', async (ctx) => {
   logger.log('Go back to menu action triggered');
   await ctx.answerCbQuery('Returning to menu');
   await ctx.scene.leave();
-  return showAlertsMenu(ctx);
+  return sendWatchlistMenu(ctx);
 });

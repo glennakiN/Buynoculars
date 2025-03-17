@@ -7,7 +7,7 @@ import { showSuccessToast, showErrorToast } from '../../components/feedback.comp
 import { WatchlistService } from '../../services/watchlist.service';
 import { createGoBackButton } from '../../constants/buttons.constant';
 import { Markup } from 'telegraf';
-import { showWatchlistMenu } from '../../menus/sub.menu/watchlist.menu';
+import { sendWatchlistMenu } from '../../menus/watchlist.menu';
 
 // Create logger
 const logger = new Logger('ShowWatchlistWizard');
@@ -117,7 +117,7 @@ export const createShowWatchlistWizard = (watchlistService: WatchlistService) =>
       logger.log('Opening watchlist settings');
       await ctx.answerCbQuery();
       await ctx.scene.leave();
-      await showWatchlistMenu(ctx);
+      await sendWatchlistMenu(ctx);
     } catch (error) {
       logger.error(`Error opening watchlist settings: ${error.message}`);
       await ctx.answerCbQuery('Error opening settings');
@@ -153,7 +153,7 @@ export const createShowWatchlistWizard = (watchlistService: WatchlistService) =>
     await ctx.scene.leave();
     
     // Return to the watchlist menu
-    await showWatchlistMenu(ctx);
+    await sendWatchlistMenu(ctx);
   });
   
   return showWatchlistWizard;

@@ -12,7 +12,7 @@ import { MultiPickerComponent, MultiPickerCallbackHandler, MultiPickerState } fr
 import { PairTimePickerComponent, PairTimePickerComponentCallbackHandler, PickerState } from 'src/telegram/components/pair-time-picker.component';
 import { OptionsService, OptionsType } from 'src/telegram/services/options.service';
 import { AlertService, AlertType, AlertNotificationType } from 'src/telegram/services/alert.service';
-import { showAlertsMenu } from 'src/telegram/menus/sub.menu/alerts.menu';
+import { sendAlertsMenu } from '../../menus/alerts.menu';
 import { WatchlistService } from 'src/telegram/services/watchlist.service';
 import { escapeMarkdown } from 'src/telegram/helpers/escape-markdown';
 // Create logger for wizard
@@ -40,7 +40,7 @@ async function step1(ctx: CustomContext) {
     logger.error('Services not properly injected into context');
     await ctx.reply('An error occurred. Please try again later.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
 
   // Get alert limits
@@ -103,7 +103,7 @@ async function step3Watchlist(ctx: CustomContext) {
     logger.error('Watchlist service not properly injected');
     await ctx.reply('An error occurred. Please try again later.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
   
   try {
@@ -116,7 +116,7 @@ async function step3Watchlist(ctx: CustomContext) {
       // No watchlists found, prompt to create one first
       await ctx.reply('You don\'t have any watchlists yet. Please create a watchlist first.');
       await ctx.scene.leave();
-      return showAlertsMenu(ctx);
+      return sendAlertsMenu(ctx);
     }
     
     // Convert watchlists to options
@@ -135,7 +135,7 @@ async function step3Watchlist(ctx: CustomContext) {
     logger.error(`Error fetching watchlists: ${error.message}`);
     await ctx.reply('An error occurred while fetching your watchlists. Please try again.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
 }
 
@@ -331,7 +331,7 @@ async function finalStep(ctx: CustomContext) {
     logger.error('Alert service not properly injected');
     await ctx.reply('An error occurred. Please try again later.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
   
   // Extract all parameters needed for alert creation
@@ -396,13 +396,13 @@ await ctx.reply(responseText);
     
     // Return to alerts menu
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
     
   } catch (error) {
     logger.error(`Error creating alert: ${error.message}`);
     await ctx.reply('An error occurred while creating your alert. Please try again.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
 }
 
@@ -498,7 +498,7 @@ registerConfirmationHandler(createAlertWizard, 'create_alert_confirm', async (ct
     logger.error('Alert service not properly injected');
     await ctx.reply('An error occurred. Please try again later.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
   
   // Extract all parameters needed for alert creation
@@ -559,12 +559,12 @@ Alert Details:
     await ctx.reply(responseText); // Send as plain text
 
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   } catch (error) {
     logger.error(`Error creating alert: ${error.message}`);
     await ctx.reply('An error occurred while creating your alert. Please try again.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
 });
 
@@ -636,7 +636,7 @@ createAlertWizard.action('go_back', async (ctx) => {
     // If at first step, leave the scene and go back to menu
     await ctx.answerCbQuery('Returning to menu');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
 });
 
@@ -722,7 +722,7 @@ createAlertWizard.action(/^select_watchlist_(.+)$/, async (ctx) => {
     logger.error('Watchlist service not properly injected');
     await ctx.answerCbQuery('Service error. Please try again.');
     await ctx.scene.leave();
-    return showAlertsMenu(ctx);
+    return sendAlertsMenu(ctx);
   }
   
   try {
